@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="e75e1e4e-5106-44ed-8349-4c893bf7619e" name="Default Changelist" comment="add building info">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="mirai_bot" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="mirai_bot" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Kotlin Class" />
+        <option value="Kotlin File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1gBNBkshWnoufFjg20JcER4wFLd" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="http.proxy" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveKotlinTopLevelDeclarationsDialog.RECENTS_KEY">
+      <recent name="com.example" />
+      <recent name="com.example.cardData" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\neal\IdeaProjects\mirai_bot\src\main\kotlin\com\example" />
+      <recent name="C:\Users\neal\IdeaProjects\mirai_bot\src\main\kotlin" />
+      <recent name="C:\Users\neal\IdeaProjects\mirai_bot\src\main\kotlin\com\example\cardData" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="gradle build" />
+    </option>
+  </component>
+  <component name="RunManager" selected="Gradle.mirai_bot [shadowJar]">
+    <configuration name="mirai_bot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="build" />
+          </list>
+        </option>
+        <option name="vmOptions" value="" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="mirai_bot [shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="shadowJar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <method v="2" />
+    </configuration>
+    <configuration name="AKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <module name="mirai_bot.main" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="AKt" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyLoaderKt (1)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <module name="mirai_bot.main" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="MyLoaderKt" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MyLoaderKt (2)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
+      <module name="mirai_bot.main" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.example.MyLoaderKt" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.mirai_bot [shadowJar]" />
+        <item itemvalue="Gradle.mirai_bot [build]" />
+        <item itemvalue="Kotlin.MyLoaderKt (2)" />
+        <item itemvalue="Kotlin.AKt" />
+        <item itemvalue="Kotlin.MyLoaderKt (1)" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="e75e1e4e-5106-44ed-8349-4c893bf7619e" name="Default Changelist" comment="" />
+      <created>1597583892711</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1597583892711</updated>
+      <workItem from="1597583894710" duration="742000" />
+      <workItem from="1597584685231" duration="2390000" />
+      <workItem from="1597591798019" duration="15837000" />
+      <workItem from="1597674311673" duration="2434000" />
+      <workItem from="1597743665677" duration="1049000" />
+      <workItem from="1597744733566" duration="16000" />
+    </task>
+    <task id="LOCAL-00001" summary="remove redundant draft">
+      <created>1597659630400</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1597659630400</updated>
+    </task>
+    <task id="LOCAL-00002" summary="modify word indent">
+      <created>1597674376977</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1597674376977</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add building info">
+      <created>1597675173362</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1597675173362</updated>
+    </task>
+    <task id="LOCAL-00004" summary="cover pwd">
+      <created>1597744125232</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1597744125232</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="remove redundant draft" />
+    <MESSAGE value="modify word indent" />
+    <MESSAGE value="add building info" />
+    <MESSAGE value="cover pwd" />
+    <option name="LAST_COMMIT_MESSAGE" value="cover pwd" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="1402" y="925" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597584303428">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state x="1402" y="925" key="#com.intellij.fileTypes.FileTypeChooser/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597584303428" />
+    <state x="1742" y="709" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1597595823809">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state x="1742" y="709" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597595823809" />
+    <state x="1787" y="813" key="Github.ShareDialog" timestamp="1597659153008">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state x="1787" y="813" key="Github.ShareDialog/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597659153008" />
+    <state x="1818" y="612" key="Github.UntrackedFilesDialog" timestamp="1597659374089">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state x="1818" y="612" key="Github.UntrackedFilesDialog/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597659374089" />
+    <state width="1701" height="319" key="GridCell.Tab.0.bottom" timestamp="1597686893735">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state width="1701" height="319" key="GridCell.Tab.0.bottom/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597686893735" />
+    <state width="1701" height="319" key="GridCell.Tab.0.center" timestamp="1597686893735">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state width="1701" height="319" key="GridCell.Tab.0.center/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597686893735" />
+    <state width="1701" height="319" key="GridCell.Tab.0.left" timestamp="1597686893735">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state width="1701" height="319" key="GridCell.Tab.0.left/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597686893735" />
+    <state width="1701" height="319" key="GridCell.Tab.0.right" timestamp="1597686893735">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state width="1701" height="319" key="GridCell.Tab.0.right/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597686893735" />
+    <state width="1700" height="392" key="GridCell.Tab.1.bottom" timestamp="1597670735014">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state width="1700" height="392" key="GridCell.Tab.1.bottom/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597670735014" />
+    <state width="1700" height="392" key="GridCell.Tab.1.center" timestamp="1597670735014">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state width="1700" height="392" key="GridCell.Tab.1.center/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597670735014" />
+    <state width="1700" height="392" key="GridCell.Tab.1.left" timestamp="1597670735013">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state width="1700" height="392" key="GridCell.Tab.1.left/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597670735013" />
+    <state width="1700" height="392" key="GridCell.Tab.1.right" timestamp="1597670735014">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state width="1700" height="392" key="GridCell.Tab.1.right/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597670735014" />
+    <state x="1867" y="645" width="981" height="707" key="SettingsEditor" timestamp="1597584137034">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state x="1867" y="645" width="981" height="707" key="SettingsEditor/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597584137034" />
+    <state x="1501" y="648" key="Vcs.Push.Dialog.v2" timestamp="1597675174657">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state x="1501" y="648" key="Vcs.Push.Dialog.v2/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597675174657" />
+    <state x="1564" y="440" width="672" height="677" key="run.anything.popup" timestamp="1597675763169">
+      <screen x="0" y="0" width="3072" height="1728" />
+    </state>
+    <state x="1564" y="440" width="672" height="677" key="run.anything.popup/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597675763169" />
+  </component>
+</project>
