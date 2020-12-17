@@ -1,0 +1,11 @@
+{
+  "文档": "[INFO] 更新内容在：https://shimo.im/docs/TQdjjwpPwd9hJhKc\nDIY的修改意见在：https://shimo.im/docs/hRIn0C91IFUYZZ6n\n讨论区在：https://github.com/LegacyGwent/LegacyGwent/issues\n",
+  "在线": "[INFO] DIY服的在线人数在：http://cynthia.ovyno.com:5005/\n原服的在线人数在：http://cynthia.ovyno.com:5000/\n欢迎大家一起打牌！",
+  "下载": "[INFO] 下载地址：群文件/客户端 或 http://cynthia.ovyno.com:5212/s/xWCJ\nzip的是电脑版，apk的是安卓版，dmg的是mac版\n有DIY的是DIY服务器，没有的是原版服务器",
+  "讨论": "[INFO] https://github.com/LegacyGwent/LegacyGwent/issues",
+  "贴吧": "[INFO] https://tieba.baidu.com/f?ie=utf-8&kw=%E6%80%80%E6%97%A7%E6%98%86%E7%89%B9%E7%89%8C",
+  "匹配码": "[INFO] 匹配界面右下角可以输入匹配码，匹配码一样的玩家可以相互对战！\n匹配码输入ai或者ai1可以匹配ai，但会优先匹配在线玩家。使用ai#f或者ai1#f可以强制匹配ai。",
+  "repo": "[INFO] 小助手开源在：https://github.com/neal2018/mirai_bot",
+  "welcome": "[WELCOME] 新人好！群里主要讨论老昆特相关！\n下载地址：群文件/客户端 或 http://cynthia.ovyno.com:5212/s/xWCJ\nzip的是电脑版，apk的是安卓版，dmg的是mac版\n有DIY的是DIY服务器，没有的是原版服务器\n讨论区在: https://github.com/LegacyGwent/LegacyGwent/issues\n期待你的参与！",
+  "help": "[HELP] 发送以下命令可以触发相应效果:\n/help 或 /h: 显示本信息\n/info: 显示相关的信息\n/welcome: 发送入群欢迎信息\n/searchcard 或 /sc + 关键词: 搜索卡牌效果\n/baidu 或 /bd + 关键词: 使用百度搜索"
+}

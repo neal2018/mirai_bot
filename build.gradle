@@ -9,7 +9,7 @@ buildscript {
 
 plugins {
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+    id 'org.jetbrains.kotlin.jvm' version '1.4.21'
     id 'com.github.johnrengelman.shadow' version '5.2.0'//使用shadow对依赖进行打包
 }
 
@@ -29,7 +29,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'net.mamoe:mirai-core-qqandroid:1.1.3'
+    implementation 'net.mamoe:mirai-core-qqandroid:1.3.3'
     implementation 'com.google.code.gson:gson:2.8.6'
     implementation 'com.beust:klaxon:5.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib"
