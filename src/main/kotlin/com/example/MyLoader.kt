@@ -203,7 +203,7 @@ fun getOnlineMessage(): String {
         val text = URL("http://cynthia.ovyno.com:5005/api/gwentdata/onlineinfo").readText()
         val parser = Parser.default()
         val json = parser.parse(StringBuilder(text)) as JsonObject
-        val userList = json["user"] as JsonArray<*>
+        val userList = json["Users"] as JsonArray<*>
         when {
             (userList.size == 0) -> "现在DIY服没有人在线...QAQ\n"
             else -> "现在DIY服有${userList.size}人在线！\n"
