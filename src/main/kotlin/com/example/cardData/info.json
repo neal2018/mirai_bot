@@ -10,4 +10,4 @@
   "help": "[HELP] 发送以下命令可以触发相应效果:\n/help 或 /h: 显示本信息\n/info: 显示相关的信息\n/welcome: 发送入群欢迎信息\n/searchcard 或 /sc + 关键词: 搜索卡牌效果\n/baidu 或 /bd + 关键词: 使用百度搜索",
   "morning": "[Morning] 早上好！今天也要元气满满！",
   "night": "[Good Night] 晚上好！今天你打牌了吗？"
-},
+}
