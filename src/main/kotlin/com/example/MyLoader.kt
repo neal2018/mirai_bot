@@ -1,27 +1,28 @@
 package com.example
 
-import com.beust.klaxon.JsonArray
-import net.mamoe.mirai.Bot
-import net.mamoe.mirai.alsoLogin
-import net.mamoe.mirai.join
-import net.mamoe.mirai.event.subscribeMessages
-import net.mamoe.mirai.event.events.MemberJoinEvent
-import net.mamoe.mirai.event.subscribeAlways
-import net.mamoe.mirai.message.data.content
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Parser
+import kotlinx.coroutines.*
+import net.mamoe.mirai.Bot
+import net.mamoe.mirai.alsoLogin
+import net.mamoe.mirai.event.events.MemberJoinEvent
+import net.mamoe.mirai.event.subscribeAlways
+import net.mamoe.mirai.event.subscribeMessages
+import net.mamoe.mirai.join
+import net.mamoe.mirai.message.data.content
 import java.io.File
 import java.net.URL
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 suspend fun main() {
     val dataPath = System.getProperty("user.dir") + File.separator + "src/main/kotlin/com/example/cardData"
-//    BotConfiguration.deviceInfo
     val qqId = 2221744851L//Bot的QQ号，需为Long类型，在结尾处添加大写L
     val password = "*****"//Bot的密码
-    val miraiBot = Bot(qqId, password){
+    val groups = listOf(945408322L)
+    val miraiBot = Bot(qqId, password) {
         fileBasedDeviceInfo("device.json") // 使用 "device.json" 保存设备信息
     }.alsoLogin()//新建Bot并登录
     miraiBot.subscribeMessages {
@@ -63,11 +64,48 @@ suspend fun main() {
         it.group.sendMessage(getWelcomeMessage(dataPath))
     }
 
+    val cal = Calendar.getInstance()
+    cal[Calendar.HOUR_OF_DAY] = 8
+    cal[Calendar.MINUTE] = 0
+    cal[Calendar.SECOND] = 0
+    val morningDate: Date = cal.time
+    Timer().scheduleAtFixedRate(object : TimerTask() {
+        override fun run() {
+            GlobalScope.launch { sendMorningMessage(miraiBot, groups, dataPath) }
+        }
+    }, morningDate, 24 * 60 * 60 * 1000)
+
+    val nightCal = Calendar.getInstance()
+    nightCal[Calendar.HOUR_OF_DAY] = 23
+    nightCal[Calendar.MINUTE] = 50
+    nightCal[Calendar.SECOND] = 0
+    val nightDate: Date = cal.time
+    Timer().scheduleAtFixedRate(object : TimerTask() {
+        override fun run() {
+            GlobalScope.launch { sendNightMessage(miraiBot, groups, dataPath) }
+        }
+    }, nightDate, 24 * 60 * 60 * 1000)
+
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出
 }
 
 fun updateJson(dataPath: String) {
 //    Runtime.getRuntime().exec(dataPath + File.separator + "update.sh")
+}
+
+suspend fun sendMorningMessage(bot: Bot, groups: List<Long>, dataPath: String) {
+    val info = loadJson(dataPath, "info")
+    for (group in groups) {
+        bot.getGroup(group).sendMessage(info["morning"] as String)
+    }
+}
+
+suspend fun sendNightMessage(bot: Bot, groups: List<Long>, dataPath: String) {
+    val info = loadJson(dataPath, "info")
+    for (group in groups) {
+        bot.getGroup(group).sendMessage(info["night"] as String)
+        bot.getGroup(group).sendMessage("下面是今天的对局环境情况\n" + getAPIMessage())
+    }
 }
 
 
@@ -187,7 +225,7 @@ fun getInfoMessage(messageContent: String, dataPath: String): String {
         }
     }
 
-    val info = loadJson(dataPath, "info.json")
+    val info = loadJson(dataPath, "info")
     if (searchContent == "在线" || searchContent == "online") {
         return getOnlineMessage()
     }
@@ -200,13 +238,10 @@ fun getInfoMessage(messageContent: String, dataPath: String): String {
 
 fun getOnlineMessage(): String {
     val extra = try {
-        val text = URL("http://cynthia.ovyno.com:5005/api/gwentdata/onlineinfo").readText()
-        val parser = Parser.default()
-        val json = parser.parse(StringBuilder(text)) as JsonObject
-        val userList = json["Users"] as JsonArray<*>
+        val text = URL("http://cynthia.ovyno.com:5005/api/gwentdata/onlinecount").readText()
         when {
-            (userList.size == 0) -> "现在DIY服没有人在线...QAQ\n"
-            else -> "现在DIY服有${userList.size}人在线！\n"
+            (text == "0") -> "现在DIY服没有人在线...QAQ\n"
+            else -> "现在DIY服有${text}人在线！\n"
         }
     } catch (ex: Exception) {
         ""
@@ -222,15 +257,15 @@ fun getAPIMessage(): String {
     val today = dateFormatter.format(Date())
     val list = listOf<String>("queryranking", "queryenvironment", "querymatches", "querycard")
     val prefix = "http://cynthia.ovyno.com:5005/api/gwentdata/"
-    return list.fold("") { acc, string -> "$acc\n$prefix$string/$today" }
+    return list.fold("[API]") { acc, string -> "$acc\n$prefix$string/$today" }
 }
 
 fun getHelpMessage(dataPath: String): String {
-    val info = loadJson(dataPath, "info.json")
+    val info = loadJson(dataPath, "info")
     return info["help"] as String
 }
 
 fun getWelcomeMessage(dataPath: String): String {
-    val info = loadJson(dataPath, "info.json")
+    val info = loadJson(dataPath, "info")
     return info["welcome"] as String
 }
