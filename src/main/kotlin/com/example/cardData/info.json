@@ -9,5 +9,5 @@
   "welcome": "[WELCOME] 新人好！群里主要讨论老昆特相关！\n下载地址：群文件/客户端 或 http://cynthia.ovyno.com:5212/s/xWCJ\nzip的是电脑版，apk的是安卓版，dmg的是mac版\n有DIY的是DIY服务器，没有的是原版服务器\n讨论区在: https://github.com/LegacyGwent/LegacyGwent/issues\n期待你的参与！",
   "help": "[HELP] 发送以下命令可以触发相应效果:\n/help 或 /h: 显示本信息\n/info: 显示相关的信息\n/welcome: 发送入群欢迎信息\n/searchcard 或 /sc + 关键词: 搜索卡牌效果\n/baidu 或 /bd + 关键词: 使用百度搜索",
   "morning": "[Morning] 早上好！今天也要元气满满！",
-  "night": "[Good Night] 晚上好！今天你打牌了吗？"
+  "night": "[Good Night] 晚上好！今天你打牌了吗？记得早睡哦"
 }
