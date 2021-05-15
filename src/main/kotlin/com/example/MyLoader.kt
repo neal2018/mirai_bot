@@ -6,12 +6,13 @@ import com.beust.klaxon.Klaxon
 import com.beust.klaxon.Parser
 import kotlinx.coroutines.*
 import net.mamoe.mirai.Bot
+import net.mamoe.mirai.BotFactory
 import net.mamoe.mirai.alsoLogin
-import net.mamoe.mirai.event.*
+import net.mamoe.mirai.event.GlobalEventChannel
+import net.mamoe.mirai.utils.BotConfiguration.MiraiProtocol.ANDROID_PAD
 import net.mamoe.mirai.event.events.MemberJoinEvent
-import net.mamoe.mirai.join
-import net.mamoe.mirai.message.*
-import net.mamoe.mirai.message.data.*
+import net.mamoe.mirai.event.subscribeGroupMessages
+import net.mamoe.mirai.event.subscribeMessages
 import java.io.File
 import java.net.URL
 import java.text.DateFormat
@@ -19,66 +20,102 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.*
 
+const val subListFile = "subs_list.json"
+const val steamListFile = "steam_list.json"
 
 suspend fun main() {
     val dataPath = System.getProperty("user.dir") + File.separator + "src/main/kotlin/com/example/cardData"
-    val qqId = 2221744851L//Bot的QQ号，需为Long类型，在结尾处添加大写L
-    val password = "*****"//Bot的密码
+    val qqId = 2221744851L // Bot的QQ号，需为Long类型，在结尾处添加大写L
+    val password = "*****" // Bot的密码
     val groups = listOf(945408322L)
 
-    val subscribes = if (File("subs.json").exists()) {
-        Klaxon().parseArray<Person>(File("subs.json").readText(Charsets.UTF_8)) as MutableList
+    val subscribes = if (File(subListFile).exists()) {
+//        Klaxon().parse<MutableMap<String, MutableList<Person>>>(File(subListFile).readText(Charsets.UTF_8))!!
+        Klaxon().parse<MutableMap<String, MutableList<JsonObject>>>(File(subListFile).readText(Charsets.UTF_8))!!
+            .mapValues { (_, v) ->
+                v.map { x -> Klaxon().parseFromJsonObject<Person>(x)!! }.toMutableList()
+            }.toMutableMap()
     } else {
-        mutableListOf<Person>()
+        mutableMapOf()
     }
 
-    val miraiBot = Bot(qqId, password) {
-        fileBasedDeviceInfo("device.json") // 使用 "device.json" 保存设备信息
-    }.alsoLogin()//新建Bot并登录
-    miraiBot.subscribeMessages {
-        (startsWith("/searchcard") or startsWith("/sc")) {
-            reply(getSearchCardMessage(message.content, dataPath))
+//    subscribes.forEach { (k, v) -> Klaxon().parseArray<Person>(v as Klaxon().JsonArray)}
+
+    val steamSubscribes = if (File(steamListFile).exists()) {
+//        Klaxon().parse<MutableMap<String, MutableList<SteamItem>>>(File(steamListFile).readText(Charsets.UTF_8))!!
+        Klaxon().parse<MutableMap<String, MutableList<JsonObject>>>(File(steamListFile).readText(Charsets.UTF_8))!!
+            .mapValues { (_, v) ->
+                v.map { x -> Klaxon().parseFromJsonObject<SteamItem>(x)!! }.toMutableList()
+            }.toMutableMap()
+    } else {
+        mutableMapOf()
+    }
+
+    val miraiBot = BotFactory.newBot(qqId, password) {
+        fileBasedDeviceInfo() // 使用 device.json 存储设备信息
+        protocol = ANDROID_PAD // 切换协议
+    }.alsoLogin()
+
+    GlobalEventChannel.subscribeMessages {
+        (startsWith("/searchcard") or startsWith("/sc")) reply { cmd ->
+            getSearchCardMessage(cmd, dataPath)
+        }
+        startsWith("/info") reply { cmd ->
+            getInfoMessage(cmd, dataPath)
         }
 
-        startsWith("/info") {
-            reply(getInfoMessage(message.content, dataPath))
+        (startsWith("/help") or startsWith("/h")) reply {
+            getHelpMessage(dataPath)
         }
 
-        (startsWith("/help") or startsWith("/h")) {
-            reply(getHelpMessage(dataPath))
+        (startsWith("/welcome") or startsWith("/w")) reply {
+            getWelcomeMessage(dataPath)
         }
 
-        (startsWith("/welcome") or startsWith("/w")) {
-            reply(getWelcomeMessage(dataPath))
+        (startsWith("/baidu") or startsWith("/bd")) reply { cmd ->
+            getSearchBaiduMessage(cmd)
         }
 
-        (startsWith("/baidu") or startsWith("/bd")) {
-            reply(getSearchBaiduMessage(message.content))
+        (startsWith("/online") or startsWith("/ol")) reply {
+            getOnlineMessage()
         }
 
-        startsWith("/addsub", removePrefix = true) {
-            reply(addSubscription(subscribes, it))
+        (startsWith("/api") or startsWith("/Api") or startsWith("/API")) reply {
+            getAPIMessage()
         }
-
-        startsWith("/unsub", removePrefix = true) {
-            reply(unSubscription(subscribes, it))
-        }
-
-        startsWith("/showsub") {
-            reply(showSubscription(subscribes))
-        }
-
-        (startsWith("/online") or startsWith("/ol")) {
-            reply(getOnlineMessage())
-        }
-
-        (startsWith("/api") or startsWith("/Api") or startsWith("/API")) {
-            reply(getAPIMessage())
+        startsWith("/smsearch") reply { cmd ->
+            getSteamDBSearch(cmd)
         }
     }
 
-    miraiBot.subscribeAlways<MemberJoinEvent> {
-        it.group.sendMessage(getWelcomeMessage(dataPath))
+    GlobalEventChannel.subscribeAlways<MemberJoinEvent> { event ->
+        event.group.sendMessage(getWelcomeMessage(dataPath))
+    }
+
+    GlobalEventChannel.subscribeGroupMessages {
+        startsWith("/bilisub") reply { cmd ->
+            addSubscription(subscribes, this.group.id.toString(), cmd)
+        }
+
+        startsWith("/biliunsub") reply { cmd ->
+            unSubscription(subscribes, this.group.id.toString(), cmd)
+        }
+
+        startsWith("/bilishow") reply {
+            showSubscription(subscribes, this.group.id.toString())
+        }
+
+        startsWith("/smsub") reply { cmd ->
+            addSteamSubscription(steamSubscribes, this.group.id.toString(), cmd)
+        }
+
+        startsWith("/smunsub") reply { cmd ->
+            unSteamSubscription(steamSubscribes, this.group.id.toString(), cmd)
+        }
+
+        startsWith("/smshow") reply {
+            showSteamSubscription(steamSubscribes, this.group.id.toString())
+        }
     }
 
     val cal = Calendar.getInstance()
@@ -105,33 +142,12 @@ suspend fun main() {
 
     Timer().scheduleAtFixedRate(object : TimerTask() {
         override fun run() {
-            GlobalScope.launch { checkLiveStatus(miraiBot, subscribes, groups) }
+            GlobalScope.launch { checkLiveStatus(miraiBot, subscribes) }
+            GlobalScope.launch { checkSteamLiveStatus(miraiBot, steamSubscribes) }
         }
     }, Date(), 30 * 1000)
 
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出
-}
-
-fun showSubscription(subscribes: MutableList<Person>): String {
-    return if (subscribes.size == 0) {
-        "当前没有订阅"
-    } else {
-        subscribes.fold("") { acc, person -> acc + person.username + "\n" }
-    }
-}
-
-fun unSubscription(subscribes: MutableList<Person>, removeID: String): String {
-    val userID = removeID.trim()
-    val n = subscribes.size
-    for (i in 0 until n) {
-        if (subscribes[i].userID == userID) {
-            val name = subscribes[i].username
-            subscribes.removeAt(i)
-            File("subs.json").writeText(Klaxon().toJsonString(subscribes))
-            return "移除订阅 $name 成功"
-        }
-    }
-    return "error"
 }
 
 data class Person(
@@ -141,25 +157,153 @@ data class Person(
     var liveStatus: Boolean
 )
 
-fun updateJson(dataPath: String) {
-//    Runtime.getRuntime().exec(dataPath + File.separator + "update.sh")
+data class SteamItem(
+    val itemName: String,
+    val appID: String,
+    var discount_percent: Int
+)
+
+fun getSteamDBSearch(cmd: String): String {
+    val itemID = when {
+        cmd.startsWith("/smsearch") -> {
+            cmd.substringAfter("/smsearch").trim()
+        }
+        else -> {
+            return "[INFO] 错误格式的命令。"
+        }
+    }
+    val encodedContent = java.net.URLEncoder.encode(itemID, "utf-8")
+    return "https://steamdb.info/search/?a=app&q=$encodedContent"
 }
 
-fun addSubscription(subscribes: MutableList<Person>, newID: String): String {
-    val userID = newID.trim()
-    // check if is all number
-    val pattern: Pattern = Pattern.compile("[0-9]*")
-    val isNum: Matcher = pattern.matcher(newID)
-    if (!isNum.matches()) {
+fun showSteamSubscription(steamSubscribes: MutableMap<String, MutableList<SteamItem>>, group: String): String {
+    val subscribesList = steamSubscribes.getOrPut(group) { mutableListOf() }
+    return if (subscribesList.size == 0) {
+        "当前没有订阅"
+    } else {
+        subscribesList.fold("") { acc, item -> acc + item.itemName + "\n" }
+    }
+}
+
+fun unSteamSubscription(
+    steamSubscribes: MutableMap<String, MutableList<SteamItem>>,
+    group: String,
+    removeID: String
+): String {
+    val itemID = when {
+        removeID.startsWith("/smunsub") -> {
+            removeID.substringAfter("/smunsub").trim()
+        }
+        else -> {
+            return "[INFO] 错误格式的命令。"
+        }
+    }
+    val subscribesList = steamSubscribes.getOrPut(group) { mutableListOf() }
+    for (i in 0 until subscribesList.size) {
+        if (subscribesList[i].appID == itemID) {
+            val name = subscribesList[i].itemName
+            subscribesList.removeAt(i)
+            File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
+            return "移除订阅 $name 成功"
+        }
+    }
+    return "error"
+}
+
+fun addSteamSubscription(
+    steamSubscribes: MutableMap<String, MutableList<SteamItem>>,
+    group: String,
+    newID: String
+): String {
+    val itemID = when {
+        newID.startsWith("/smsub") -> {
+            newID.substringAfter("/smsub").trim()
+        }
+        else -> {
+            return "[INFO] 错误格式的命令。"
+        }
+    }
+    if (!Pattern.compile("[0-9]*").matcher(itemID).matches()) {
         return "ID格式不正确"
     }
-    for (person in subscribes) {
-        if (person.userID == newID) {
+    val subscribesList = steamSubscribes.getOrPut(group) { mutableListOf() }
+    for (item in subscribesList) {
+        if (item.appID == itemID) {
             return "已经订阅过了"
         }
     }
     return try {
-        val infoLink = "http://api.bilibili.com/x/space/acc/info?mid=$userID"
+        val infoLink = "https://store.steampowered.com/api/appdetails?appids=$itemID&cc=cn&filters=basic"
+        val request = HttpRequest.get(infoLink).timeout(500).header("User-Agent", "steam item status checker")
+        val response = request.executeAsync()
+        val stringBuilder: StringBuilder = StringBuilder(response.body())
+        val info = Parser.default().parse(stringBuilder) as JsonObject
+        val infoData = (info[itemID] as JsonObject)["data"] as JsonObject
+        val name = infoData["name"] as String
+        subscribesList.add(SteamItem(name, itemID, 0))
+        File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
+        "订阅 $name 成功"
+    } catch (ex: Exception) {
+        "error"
+    }
+}
+
+fun showSubscription(subscribes: MutableMap<String, MutableList<Person>>, group: String): String {
+    val subscribesList = subscribes.getOrPut(group) { mutableListOf() }
+    return if (subscribesList.size == 0) {
+        "当前没有订阅"
+    } else {
+        subscribesList.fold("") { acc, person -> acc + person.username + "\n" }
+    }
+}
+
+fun unSubscription(subscribes: MutableMap<String, MutableList<Person>>, group: String, removeID: String): String {
+    val userID = when {
+        removeID.startsWith("/biliunsub") -> {
+            removeID.substringAfter("/biliunsub").trim()
+        }
+        else -> {
+            return "[INFO] 错误格式的命令。"
+        }
+    }
+    val subscribesList = subscribes.getOrPut(group) { mutableListOf() }
+    for (i in 0 until subscribesList.size) {
+        if (subscribesList[i].userID == userID) {
+            val name = subscribesList[i].username
+            subscribesList.removeAt(i)
+            File(subListFile).writeText(Klaxon().toJsonString(subscribes))
+            return "移除订阅 $name 成功"
+        }
+    }
+    return "error"
+}
+
+//fun updateJson(dataPath: String) {
+////    Runtime.getRuntime().exec(dataPath + File.separator + "update.sh")
+//}
+
+fun addSubscription(subscribes: MutableMap<String, MutableList<Person>>, group: String, newID: String): String {
+    val userID = when {
+        newID.startsWith("/bilisub") -> {
+            newID.substringAfter("/bilisub").trim()
+        }
+        else -> {
+            return "[INFO] 错误格式的命令。"
+        }
+    }
+    // check if is all number
+    if (!Pattern.compile("[0-9]*").matcher(userID).matches()) {
+        return "BILI UID格式不正确"
+    }
+
+    val subscribesList = subscribes.getOrPut(group) { mutableListOf() }
+    for (person in subscribesList) {
+        if (person.userID == userID) {
+            return "已经订阅过了"
+        }
+    }
+    return try {
+        val infoLink = "https://api.bilibili.com/x/space/acc/info?mid=$userID"
         val request = HttpRequest.get(infoLink).timeout(500)
             .header("User-Agent", "Bili live status checker")
 
@@ -169,8 +313,8 @@ fun addSubscription(subscribes: MutableList<Person>, newID: String): String {
         val infoData = info["data"] as JsonObject
         val name = infoData["name"] as String
         val roomID = (infoData["live_room"] as JsonObject)["roomid"].toString()
-        subscribes.add(Person(name, userID, roomID, false))
-        File("subs.json").writeText(Klaxon().toJsonString(subscribes))
+        subscribesList.add(Person(name, userID, roomID, false))
+        File(subListFile).writeText(Klaxon().toJsonString(subscribes))
         "订阅 $name 成功"
     } catch (ex: Exception) {
         "error"
@@ -180,46 +324,81 @@ fun addSubscription(subscribes: MutableList<Person>, newID: String): String {
 suspend fun sendMorningMessage(bot: Bot, groups: List<Long>, dataPath: String) {
     val info = loadJson(dataPath, "info")
     for (group in groups) {
-        bot.getGroup(group).sendMessage(info["morning"] as String)
+//        bot.getGroup(group)?.sendMessage(info["morning"] as String)
     }
 }
 
 suspend fun sendNightMessage(bot: Bot, groups: List<Long>, dataPath: String) {
     val info = loadJson(dataPath, "info")
     for (group in groups) {
-        bot.getGroup(group).sendMessage(info["night"] as String)
-        bot.getGroup(group).sendMessage("这是今天的对局环境情况")
-        bot.getGroup(group).sendMessage(getAPIMessage())
+        bot.getGroup(group)?.sendMessage(info["night"] as String)
+        bot.getGroup(group)?.sendMessage("这是今天的对局环境情况")
+        bot.getGroup(group)?.sendMessage(getAPIMessage())
     }
 }
 
-suspend fun checkLiveStatus(bot: Bot, subscribes: List<Person>, groups: List<Long>) {
-    for (person in subscribes) {
-        val liveUrl = "http://api.live.bilibili.com/room/v1/Room/get_info?id="
-        val request = HttpRequest.get(liveUrl + person.roomID).timeout(500)
-            .header("User-Agent", "Bili live status checker")
+suspend fun checkLiveStatus(bot: Bot, subscribes: MutableMap<String, MutableList<Person>>) {
+    subscribes.forEach { (group, subscribesList) ->
+        for (person in subscribesList) {
+            val liveUrl = "https://api.live.bilibili.com/room/v1/Room/get_info?id="
+            val request = HttpRequest.get(liveUrl + person.roomID).timeout(500)
+                .header("User-Agent", "Bili live status checker")
+            try {
+                val response = request.executeAsync()
+                val stringBuilder: StringBuilder = StringBuilder(response.body())
+                val info = Parser.default().parse(stringBuilder) as JsonObject
+                val infoData = info["data"] as JsonObject
+                val liveStatus = infoData["live_status"] as Int
+                if (liveStatus == 1 && !person.liveStatus) {
+                    person.liveStatus = true
+                    val liveRoom = "https://live.bilibili.com/" + person.roomID
+                    val title = infoData["title"] as String
+                    bot.getGroup(group.toLong())?.sendMessage(person.username + " 开播啦！！直播标题：\"$title\"，地址：$liveRoom")
+                } else if (liveStatus != 1) {
+                    person.liveStatus = false
+                }
+            } catch (ex: Exception) {
+
+            }
+        }
+    }
+
+}
+
+suspend fun checkSteamLiveStatus(
+    bot: Bot,
+    SteamSubscribes: MutableMap<String, MutableList<SteamItem>>
+) {
+    SteamSubscribes.forEach { (group, subscribesList) ->
+        val queryList = subscribesList.joinToString { "${it.appID}," }
+        val queryURL = "https://store.steampowered.com/api/appdetails?appids=${queryList}&cc=cn&filters=price_overview"
+        val request = HttpRequest.get(queryURL).timeout(1000)
+            .header("User-Agent", "steam status checker")
         try {
             val response = request.executeAsync()
             val stringBuilder: StringBuilder = StringBuilder(response.body())
             val info = Parser.default().parse(stringBuilder) as JsonObject
-            val infoData = info["data"] as JsonObject
-            val liveStatus = infoData["live_status"] as Int
-            if (liveStatus == 1 && !person.liveStatus) {
-                person.liveStatus = true
-                val liveRoom = "https://live.bilibili.com/" + person.roomID
-                val title = infoData["title"] as String
-                for (group in groups) {
-                    bot.getGroup(group).sendMessage(person.username + "开播啦！！直播标题：\"$title\"，地址：$liveRoom")
+            for (item in subscribesList) {
+                val infoData = (info[item.appID] as JsonObject)["data"] as JsonObject
+                val priceOverview = infoData["price_overview"] as JsonObject
+                val discountPercent = priceOverview["discount_percent"] as Int
+                if (discountPercent > item.discount_percent) {
+                    item.discount_percent = discountPercent
+                    val price = priceOverview["final_formatted"] as String
+                    val steamDB = "https://steamdb.info/app/${item.appID}/"
+                    val steam = "https://store.steampowered.com/app/${item.appID}/"
+                    bot.getGroup(group.toLong())
+                        ?.sendMessage(item.itemName + " 目前折扣：$discountPercent%，现价：$price。地址：steamDB：$steamDB, steam: $steam")
+                } else {
+                    item.discount_percent = discountPercent
                 }
-            } else if (liveStatus != 1) {
-                person.liveStatus = false
             }
         } catch (ex: Exception) {
 
         }
     }
-}
 
+}
 
 fun loadJson(dataPath: String, name: String): JsonObject {
     val fileContent = File(dataPath + File.separator + name + ".json").readText(Charsets.UTF_8)
@@ -324,7 +503,7 @@ fun getSearchBaiduMessage(messageContent: String): String {
         }
     }
     val encodedContent = java.net.URLEncoder.encode(searchContent, "utf-8")
-    return "[INFO] 点击 http://www.baidu.com/s?wd=$encodedContent 查看搜索结果！"
+    return "[INFO] 点击 https://www.baidu.com/s?wd=$encodedContent 查看搜索结果！"
 }
 
 fun getInfoMessage(messageContent: String, dataPath: String): String {
@@ -367,7 +546,7 @@ fun getOnlineMessage(): String {
 fun getAPIMessage(): String {
     val dateFormatter: DateFormat = SimpleDateFormat("yyyy-MM-dd")
     val today = dateFormatter.format(Date())
-    val list = listOf<String>("queryranking", "queryenvironment", "querymatches", "querycard")
+    val list = listOf("queryranking", "queryenvironment", "querymatches", "querycard")
     val prefix = "http://cynthia.ovyno.com:5005/api/gwentdata/"
     return list.fold("[API]") { acc, string -> "$acc\n$prefix$string/$today" }
 }
