@@ -30,7 +30,6 @@ suspend fun main() {
     val groups = listOf(945408322L)
 
     val subscribes = if (File(subListFile).exists()) {
-//        Klaxon().parse<MutableMap<String, MutableList<Person>>>(File(subListFile).readText(Charsets.UTF_8))!!
         Klaxon().parse<MutableMap<String, MutableList<JsonObject>>>(File(subListFile).readText(Charsets.UTF_8))!!
             .mapValues { (_, v) ->
                 v.map { x -> Klaxon().parseFromJsonObject<Person>(x)!! }.toMutableList()
@@ -39,10 +38,7 @@ suspend fun main() {
         mutableMapOf()
     }
 
-//    subscribes.forEach { (k, v) -> Klaxon().parseArray<Person>(v as Klaxon().JsonArray)}
-
     val steamSubscribes = if (File(steamListFile).exists()) {
-//        Klaxon().parse<MutableMap<String, MutableList<SteamItem>>>(File(steamListFile).readText(Charsets.UTF_8))!!
         Klaxon().parse<MutableMap<String, MutableList<JsonObject>>>(File(steamListFile).readText(Charsets.UTF_8))!!
             .mapValues { (_, v) ->
                 v.map { x -> Klaxon().parseFromJsonObject<SteamItem>(x)!! }.toMutableList()
@@ -160,6 +156,7 @@ data class Person(
 data class SteamItem(
     val itemName: String,
     val appID: String,
+    var price: String,
     var discount_percent: Int
 )
 
@@ -181,7 +178,7 @@ fun showSteamSubscription(steamSubscribes: MutableMap<String, MutableList<SteamI
     return if (subscribesList.size == 0) {
         "当前没有订阅"
     } else {
-        subscribesList.fold("") { acc, item -> acc + item.itemName + "\n" }
+        subscribesList.fold("") { acc, item -> "$acc ${item.itemName} (${item.appID})，现价：${item.price}，折扣：${item.discount_percent}% \n" }
     }
 }
 
@@ -234,17 +231,20 @@ fun addSteamSubscription(
     }
     return try {
         val infoLink = "https://store.steampowered.com/api/appdetails?appids=$itemID&cc=cn&filters=basic"
-        val request = HttpRequest.get(infoLink).timeout(500).header("User-Agent", "steam item status checker")
+        val request = HttpRequest.get(infoLink).timeout(2500).header(
+            "User-Agent",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
+        )
         val response = request.executeAsync()
         val stringBuilder: StringBuilder = StringBuilder(response.body())
         val info = Parser.default().parse(stringBuilder) as JsonObject
         val infoData = (info[itemID] as JsonObject)["data"] as JsonObject
         val name = infoData["name"] as String
-        subscribesList.add(SteamItem(name, itemID, 0))
+        subscribesList.add(SteamItem(name, itemID, "NO DATA", 0))
         File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
         "订阅 $name 成功"
     } catch (ex: Exception) {
-        "error"
+        "网络状况不良，请稍等再试.。。"
     }
 }
 
@@ -253,7 +253,7 @@ fun showSubscription(subscribes: MutableMap<String, MutableList<Person>>, group:
     return if (subscribesList.size == 0) {
         "当前没有订阅"
     } else {
-        subscribesList.fold("") { acc, person -> acc + person.username + "\n" }
+        subscribesList.fold("") { acc, person -> "$acc ${person.username} (${person.userID}) \n" }
     }
 }
 
@@ -275,7 +275,7 @@ fun unSubscription(subscribes: MutableMap<String, MutableList<Person>>, group: S
             return "移除订阅 $name 成功"
         }
     }
-    return "error"
+    return "网络状况不良，请稍等再试.。。"
 }
 
 //fun updateJson(dataPath: String) {
@@ -317,14 +317,14 @@ fun addSubscription(subscribes: MutableMap<String, MutableList<Person>>, group: 
         File(subListFile).writeText(Klaxon().toJsonString(subscribes))
         "订阅 $name 成功"
     } catch (ex: Exception) {
-        "error"
+        "网络状况不良，请稍等再试.。。"
     }
 }
 
 suspend fun sendMorningMessage(bot: Bot, groups: List<Long>, dataPath: String) {
     val info = loadJson(dataPath, "info")
     for (group in groups) {
-//        bot.getGroup(group)?.sendMessage(info["morning"] as String)
+        bot.getGroup(group)?.sendMessage(info["morning"] as String)
     }
 }
 
@@ -341,8 +341,11 @@ suspend fun checkLiveStatus(bot: Bot, subscribes: MutableMap<String, MutableList
     subscribes.forEach { (group, subscribesList) ->
         for (person in subscribesList) {
             val liveUrl = "https://api.live.bilibili.com/room/v1/Room/get_info?id="
-            val request = HttpRequest.get(liveUrl + person.roomID).timeout(500)
-                .header("User-Agent", "Bili live status checker")
+            val request = HttpRequest.get(liveUrl + person.roomID).timeout(1000)
+                .header(
+                    "User-Agent",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
+                )
             try {
                 val response = request.executeAsync()
                 val stringBuilder: StringBuilder = StringBuilder(response.body())
@@ -357,6 +360,7 @@ suspend fun checkLiveStatus(bot: Bot, subscribes: MutableMap<String, MutableList
                 } else if (liveStatus != 1) {
                     person.liveStatus = false
                 }
+                File(subListFile).writeText(Klaxon().toJsonString(subscribes))
             } catch (ex: Exception) {
 
             }
@@ -367,34 +371,43 @@ suspend fun checkLiveStatus(bot: Bot, subscribes: MutableMap<String, MutableList
 
 suspend fun checkSteamLiveStatus(
     bot: Bot,
-    SteamSubscribes: MutableMap<String, MutableList<SteamItem>>
+    steamSubscribes: MutableMap<String, MutableList<SteamItem>>
 ) {
-    SteamSubscribes.forEach { (group, subscribesList) ->
-        val queryList = subscribesList.joinToString { "${it.appID}," }
+    steamSubscribes.forEach { (group, subscribesList) ->
+        val queryList = subscribesList.joinToString(separator = ",") { it.appID }
         val queryURL = "https://store.steampowered.com/api/appdetails?appids=${queryList}&cc=cn&filters=price_overview"
-        val request = HttpRequest.get(queryURL).timeout(1000)
-            .header("User-Agent", "steam status checker")
+        val request = HttpRequest.get(queryURL).timeout(2500)
+            .header(
+                "User-Agent",
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
+            )
         try {
             val response = request.executeAsync()
             val stringBuilder: StringBuilder = StringBuilder(response.body())
             val info = Parser.default().parse(stringBuilder) as JsonObject
             for (item in subscribesList) {
-                val infoData = (info[item.appID] as JsonObject)["data"] as JsonObject
-                val priceOverview = infoData["price_overview"] as JsonObject
-                val discountPercent = priceOverview["discount_percent"] as Int
-                if (discountPercent > item.discount_percent) {
-                    item.discount_percent = discountPercent
+                try {
+                    val infoData = (info[item.appID] as JsonObject)["data"] as JsonObject
+                    val priceOverview = infoData["price_overview"] as JsonObject
+                    val discountPercent = priceOverview["discount_percent"] as Int
                     val price = priceOverview["final_formatted"] as String
-                    val steamDB = "https://steamdb.info/app/${item.appID}/"
-                    val steam = "https://store.steampowered.com/app/${item.appID}/"
-                    bot.getGroup(group.toLong())
-                        ?.sendMessage(item.itemName + " 目前折扣：$discountPercent%，现价：$price。地址：steamDB：$steamDB, steam: $steam")
-                } else {
-                    item.discount_percent = discountPercent
+                    item.price = price
+                    if (discountPercent > item.discount_percent) {
+                        item.discount_percent = discountPercent
+                        val steamDB = "https://steamdb.info/app/${item.appID}/"
+                        val steam = "https://store.steampowered.com/app/${item.appID}/"
+                        bot.getGroup(group.toLong())
+                            ?.sendMessage(item.itemName + " 目前折扣：$discountPercent%，现价：$price。地址：steamDB：$steamDB, steam: $steam")
+                    } else {
+                        item.discount_percent = discountPercent
+                    }
+                } catch (ex: Exception) {
+                    println(ex)
                 }
             }
+            File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
         } catch (ex: Exception) {
-
+            println(ex)
         }
     }
 
@@ -503,7 +516,7 @@ fun getSearchBaiduMessage(messageContent: String): String {
         }
     }
     val encodedContent = java.net.URLEncoder.encode(searchContent, "utf-8")
-    return "[INFO] 点击 https://www.baidu.com/s?wd=$encodedContent 查看搜索结果！"
+    return "https://www.baidu.com/s?wd=$encodedContent"
 }
 
 fun getInfoMessage(messageContent: String, dataPath: String): String {
