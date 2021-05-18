@@ -26,7 +26,7 @@ const val steamListFile = "steam_list.json"
 suspend fun main() {
     val dataPath = System.getProperty("user.dir") + File.separator + "src/main/kotlin/com/example/cardData"
     val qqId = 2221744851L // Bot的QQ号，需为Long类型，在结尾处添加大写L
-    val password = "*****" // Bot的密码
+    val password = readLine()!!
     val groups = listOf(945408322L)
 
     val subscribes = if (File(subListFile).exists()) {
@@ -141,7 +141,7 @@ suspend fun main() {
             GlobalScope.launch { checkLiveStatus(miraiBot, subscribes) }
             GlobalScope.launch { checkSteamLiveStatus(miraiBot, steamSubscribes) }
         }
-    }, Date(), 30 * 1000)
+    }, Date(), 60 * 1000)
 
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出
 }
@@ -376,6 +376,7 @@ suspend fun checkSteamLiveStatus(
     steamSubscribes.forEach { (group, subscribesList) ->
         val queryList = subscribesList.joinToString(separator = ",") { it.appID }
         val queryURL = "https://store.steampowered.com/api/appdetails?appids=${queryList}&cc=cn&filters=price_overview"
+        println(queryURL)
         val request = HttpRequest.get(queryURL).timeout(2500)
             .header(
                 "User-Agent",
@@ -402,10 +403,10 @@ suspend fun checkSteamLiveStatus(
                         item.discount_percent = discountPercent
                     }
                 } catch (ex: Exception) {
-                    println(ex)
+
                 }
+                File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
             }
-            File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
         } catch (ex: Exception) {
             println(ex)
         }
