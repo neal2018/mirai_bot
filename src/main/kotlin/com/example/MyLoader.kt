@@ -374,41 +374,44 @@ suspend fun checkSteamLiveStatus(
     steamSubscribes: MutableMap<String, MutableList<SteamItem>>
 ) {
     steamSubscribes.forEach { (group, subscribesList) ->
-        val queryList = subscribesList.joinToString(separator = ",") { it.appID }
-        val queryURL = "https://store.steampowered.com/api/appdetails?appids=${queryList}&cc=cn&filters=price_overview"
-        println(queryURL)
-        val request = HttpRequest.get(queryURL).timeout(2500)
-            .header(
-                "User-Agent",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
-            )
-        try {
-            val response = request.executeAsync()
-            val stringBuilder: StringBuilder = StringBuilder(response.body())
-            val info = Parser.default().parse(stringBuilder) as JsonObject
-            for (item in subscribesList) {
-                try {
-                    val infoData = (info[item.appID] as JsonObject)["data"] as JsonObject
-                    val priceOverview = infoData["price_overview"] as JsonObject
-                    val discountPercent = priceOverview["discount_percent"] as Int
-                    val price = priceOverview["final_formatted"] as String
-                    item.price = price
-                    if (discountPercent > item.discount_percent) {
-                        item.discount_percent = discountPercent
-                        val steamDB = "https://steamdb.info/app/${item.appID}/"
-                        val steam = "https://store.steampowered.com/app/${item.appID}/"
-                        bot.getGroup(group.toLong())
-                            ?.sendMessage(item.itemName + " 目前折扣：$discountPercent%，现价：$price。地址：steamDB：$steamDB, steam: $steam")
-                    } else {
-                        item.discount_percent = discountPercent
-                    }
-                } catch (ex: Exception) {
+        if (subscribesList.isNotEmpty()) {
+            val queryList = subscribesList.joinToString(separator = ",") { it.appID }
+            val queryURL =
+                "https://store.steampowered.com/api/appdetails?appids=${queryList}&cc=cn&filters=price_overview"
+            println(queryURL)
+            val request = HttpRequest.get(queryURL).timeout(2500)
+                .header(
+                    "User-Agent",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36"
+                )
+            try {
+                val response = request.executeAsync()
+                val stringBuilder: StringBuilder = StringBuilder(response.body())
+                val info = Parser.default().parse(stringBuilder) as JsonObject
+                for (item in subscribesList) {
+                    try {
+                        val infoData = (info[item.appID] as JsonObject)["data"] as JsonObject
+                        val priceOverview = infoData["price_overview"] as JsonObject
+                        val discountPercent = priceOverview["discount_percent"] as Int
+                        val price = priceOverview["final_formatted"] as String
+                        item.price = price
+                        if (discountPercent > item.discount_percent) {
+                            item.discount_percent = discountPercent
+                            val steamDB = "https://steamdb.info/app/${item.appID}/"
+                            val steam = "https://store.steampowered.com/app/${item.appID}/"
+                            bot.getGroup(group.toLong())
+                                ?.sendMessage(item.itemName + " 目前折扣：$discountPercent%，现价：$price。地址：steamDB：$steamDB, steam: $steam")
+                        } else {
+                            item.discount_percent = discountPercent
+                        }
+                    } catch (ex: Exception) {
 
+                    }
+                    File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
                 }
-                File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
+            } catch (ex: Exception) {
+                println(ex)
             }
-        } catch (ex: Exception) {
-            println(ex)
         }
     }
 
