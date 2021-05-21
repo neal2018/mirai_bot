@@ -64,10 +64,6 @@ suspend fun main() {
             getHelpMessage(dataPath)
         }
 
-        (startsWith("/welcome") or startsWith("/w")) reply {
-            getWelcomeMessage(dataPath, this.group.id.toString())
-        }
-
         (startsWith("/baidu") or startsWith("/bd")) reply { cmd ->
             getSearchBaiduMessage(cmd)
         }
@@ -89,6 +85,10 @@ suspend fun main() {
     }
 
     GlobalEventChannel.subscribeGroupMessages {
+        (startsWith("/welcome") or startsWith("/w")) reply {
+            getWelcomeMessage(dataPath, this.group.id.toString())
+        }
+
         startsWith("/bilisub") reply { cmd ->
             addSubscription(subscribes, this.group.id.toString(), cmd)
         }
@@ -573,7 +573,7 @@ fun getHelpMessage(dataPath: String): String {
     return info["help"] as String
 }
 
-fun getWelcomeMessage(dataPath: String,id: String): String {
+fun getWelcomeMessage(dataPath: String, id: String): String {
     val info = loadJson(dataPath, "info")
-    return info["welcome"+id] as String
+    return info["welcome" + id] as String
 }
