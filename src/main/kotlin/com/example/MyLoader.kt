@@ -89,6 +89,10 @@ suspend fun main() {
             getWelcomeMessage(dataPath, this.group.id.toString())
         }
 
+        startsWith("/swelcome") reply { cmd ->
+            setWelcomeMessage(dataPath, this.group.id.toString(), cmd)
+        }
+
         startsWith("/bilisub") reply { cmd ->
             addSubscription(subscribes, this.group.id.toString(), cmd)
         }
@@ -121,7 +125,7 @@ suspend fun main() {
     val morningDate: Date = cal.time
     Timer().scheduleAtFixedRate(object : TimerTask() {
         override fun run() {
-            GlobalScope.launch { sendMorningMessage(miraiBot, groups, dataPath) }
+//            GlobalScope.launch { sendMorningMessage(miraiBot, groups, dataPath) }
         }
     }, morningDate, 24 * 60 * 60 * 1000)
 
@@ -419,7 +423,6 @@ suspend fun checkSteamLiveStatus(
 
 fun loadJson(dataPath: String, name: String): JsonObject {
     val fileContent = File(dataPath + File.separator + name + ".json").readText(Charsets.UTF_8)
-
     val parser: Parser = Parser.default()
     val stringBuilder: StringBuilder = StringBuilder(fileContent)
     return parser.parse(stringBuilder) as JsonObject
@@ -575,5 +578,25 @@ fun getHelpMessage(dataPath: String): String {
 
 fun getWelcomeMessage(dataPath: String, id: String): String {
     val info = loadJson(dataPath, "info")
-    return info["welcome" + id] as String
+    return if ("welcome$id" in info) {
+        info["welcome$id"] as String
+    } else {
+        "欢迎新成员！"
+    }
+}
+
+fun setWelcomeMessage(dataPath: String, id: String, cmd: String): String {
+    val msg = when {
+        cmd.startsWith("/swelcome") -> {
+            cmd.substringAfter("/swelcome").trim()
+        }
+        else -> {
+            return "[INFO] 错误格式的命令。"
+        }
+    }
+    val infoPath = dataPath + File.separator + "info.json"
+    val info = Klaxon().parse<MutableMap<String, String>>(File(infoPath).readText(Charsets.UTF_8))!!
+    info["welcome$id"] = msg
+    File(infoPath).writeText(Klaxon().toJsonString(info))
+    return "设置欢迎信息成功！"
 }
