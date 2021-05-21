@@ -65,7 +65,7 @@ suspend fun main() {
         }
 
         (startsWith("/welcome") or startsWith("/w")) reply {
-            getWelcomeMessage(dataPath)
+            getWelcomeMessage(dataPath, this.group.id.toString())
         }
 
         (startsWith("/baidu") or startsWith("/bd")) reply { cmd ->
@@ -85,7 +85,7 @@ suspend fun main() {
     }
 
     GlobalEventChannel.subscribeAlways<MemberJoinEvent> { event ->
-        event.group.sendMessage(getWelcomeMessage(dataPath))
+        event.group.sendMessage(getWelcomeMessage(dataPath, this.group.id.toString()))
     }
 
     GlobalEventChannel.subscribeGroupMessages {
