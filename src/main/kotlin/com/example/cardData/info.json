@@ -6,7 +6,8 @@
   "贴吧": "[INFO] https://tieba.baidu.com/f?ie=utf-8&kw=%E6%80%80%E6%97%A7%E6%98%86%E7%89%B9%E7%89%8C",
   "匹配码": "[INFO] 匹配界面右下角可以输入匹配码，匹配码一样的玩家可以相互对战！\n匹配码输入ai或者ai1可以匹配ai，但会优先匹配在线玩家。使用ai#f或者ai1#f可以强制匹配ai。",
   "repo": "[INFO] 小助手开源在：https://github.com/neal2018/mirai_bot",
-  "welcome": "[WELCOME] 新人好！群里主要讨论老昆特相关！\n下载地址：群文件/客户端 或 http://cynthia.ovyno.com:5212/s/xWCJ\nzip的是电脑版，apk的是安卓版，dmg的是mac版\n有DIY的是DIY服务器，没有的是原版服务器\n讨论区在: https://github.com/LegacyGwent/LegacyGwent/issues\n期待你的参与！",
+  "welcome945408322": "[WELCOME] 新人好！群里主要讨论老昆特相关！\n下载地址：群文件/客户端 或 http://cynthia.ovyno.com:5212/s/xWCJ\nzip的是电脑版，apk的是安卓版，dmg的是mac版\n有DIY的是DIY服务器，没有的是原版服务器\n讨论区在: https://github.com/LegacyGwent/LegacyGwent/issues\n期待你的参与！",
+  "welcome883635575": "[WELCOME] 测试一下欢迎宣言",
   "help": "[HELP] 发送以下命令可以触发相应效果:\n/help 或 /h: 显示本信息\n/info: 显示相关的信息\n/welcome: 发送入群欢迎信息\n/searchcard 或 /sc + 关键词: 搜索卡牌效果\n/baidu 或 /bd + 关键词: 使用百度搜索",
   "morning": "[Morning] 早上好！今天也要元气满满！",
   "night": "[Good Night] 晚上好！今天你打牌了吗？记得早睡哦"
