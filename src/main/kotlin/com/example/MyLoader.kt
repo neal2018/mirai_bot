@@ -125,7 +125,7 @@ suspend fun main() {
     val morningDate: Date = cal.time
     Timer().scheduleAtFixedRate(object : TimerTask() {
         override fun run() {
-//            GlobalScope.launch { sendMorningMessage(miraiBot, groups, dataPath) }
+            GlobalScope.launch { sendMorningMessage(miraiBot, groups, dataPath) }
         }
     }, morningDate, 24 * 60 * 60 * 1000)
 
