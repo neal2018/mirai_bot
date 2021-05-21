@@ -573,7 +573,7 @@ fun getHelpMessage(dataPath: String): String {
     return info["help"] as String
 }
 
-fun getWelcomeMessage(dataPath: String): String {
+fun getWelcomeMessage(dataPath: String,id: String): String {
     val info = loadJson(dataPath, "info")
-    return info["welcome"] as String
+    return info["welcome"+id] as String
 }
