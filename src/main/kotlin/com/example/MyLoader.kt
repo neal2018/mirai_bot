@@ -143,9 +143,14 @@ suspend fun main() {
     Timer().scheduleAtFixedRate(object : TimerTask() {
         override fun run() {
             GlobalScope.launch { checkLiveStatus(miraiBot, subscribes) }
-            GlobalScope.launch { checkSteamLiveStatus(miraiBot, steamSubscribes) }
         }
     }, Date(), 60 * 1000)
+
+    Timer().scheduleAtFixedRate(object : TimerTask() {
+        override fun run() {
+            GlobalScope.launch { checkSteamLiveStatus(miraiBot, steamSubscribes) }
+        }
+    }, Date(), 5 * 60 * 1000)
 
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出
 }
@@ -409,7 +414,7 @@ suspend fun checkSteamLiveStatus(
                             item.discount_percent = discountPercent
                         }
                     } catch (ex: Exception) {
-
+                        println(ex)
                     }
                     File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
                 }
