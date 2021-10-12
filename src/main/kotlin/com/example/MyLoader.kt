@@ -680,12 +680,14 @@ fun addDeck(messageContent: String): String {
     val deckInfo = loadJson(dataPath, "deckInfo")
     val deckInfoPath = dataPath + File.separator + "deckInfo.json"
     if (inputs[0] in deckInfo) {
-        deckInfo[inputs[0]] = (deckInfo[inputs[0]] as String) + "###" + inputs[1]
+        val current = (deckInfo[searchContent] as String).split("###").toTypedArray()
+        if (!Arrays.stream(current).anyMatch { t -> t == inputs[1] })
+            deckInfo[inputs[0]] = (deckInfo[inputs[0]] as String) + "###" + inputs[1]
     } else {
         deckInfo[inputs[0]] = inputs[1]
     }
     File(deckInfoPath).writeText(Klaxon().toJsonString(deckInfo))
-    return getDeck("sd" + inputs[0])
+    return getDeck("/sd" + inputs[0])
 }
 
 fun showDeck(): String {
