@@ -23,15 +23,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e75e1e4e-5106-44ed-8349-4c893bf7619e" name="Default Changelist" comment="add building info">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.classpath" beforeDir="false" afterPath="$PROJECT_DIR$/.classpath" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/com/example/MyLoader.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/com/example/MyLoader.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,8 +89,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="http.proxy" />
   </component>
@@ -108,7 +112,7 @@
       <command value="gradle build" />
     </option>
   </component>
-  <component name="RunManager" selected="Gradle.mirai_bot [shadowJar]">
+  <component name="RunManager" selected="Kotlin.MyLoaderKt (2)">
     <configuration name="mirai_bot [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -125,7 +129,9 @@
         </option>
         <option name="vmOptions" value="" />
       </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
     <configuration name="mirai_bot [shadowJar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
@@ -144,53 +150,37 @@
         </option>
         <option name="vmOptions" />
       </ExternalSystemSettings>
-      <GradleScriptDebugEnabled>true</GradleScriptDebugEnabled>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
       <method v="2" />
     </configuration>
     <configuration name="AKt" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <module name="mirai_bot.main" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
       <option name="MAIN_CLASS_NAME" value="AKt" />
-      <option name="WORKING_DIRECTORY" />
+      <module name="mirai_bot.main" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="MyLoaderKt (1)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <module name="mirai_bot.main" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
       <option name="MAIN_CLASS_NAME" value="MyLoaderKt" />
-      <option name="WORKING_DIRECTORY" />
+      <module name="mirai_bot.main" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="MyLoaderKt (2)" type="JetRunConfigurationType" temporary="true" nameIsGenerated="true">
-      <module name="mirai_bot.main" />
-      <option name="VM_PARAMETERS" />
-      <option name="PROGRAM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
       <option name="MAIN_CLASS_NAME" value="com.example.MyLoaderKt" />
-      <option name="WORKING_DIRECTORY" />
+      <module name="mirai_bot.main" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Kotlin.MyLoaderKt (2)" />
         <item itemvalue="Gradle.mirai_bot [shadowJar]" />
         <item itemvalue="Gradle.mirai_bot [build]" />
-        <item itemvalue="Kotlin.MyLoaderKt (2)" />
         <item itemvalue="Kotlin.AKt" />
         <item itemvalue="Kotlin.MyLoaderKt (1)" />
       </list>
@@ -263,67 +253,5 @@
     <MESSAGE value="add building info" />
     <MESSAGE value="cover pwd" />
     <option name="LAST_COMMIT_MESSAGE" value="cover pwd" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="1402" y="925" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597584303428">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state x="1402" y="925" key="#com.intellij.fileTypes.FileTypeChooser/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597584303428" />
-    <state x="1742" y="709" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog" timestamp="1597595823809">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state x="1742" y="709" key="#org.jetbrains.kotlin.idea.refactoring.move.moveDeclarations.ui.MoveKotlinTopLevelDeclarationsDialog/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597595823809" />
-    <state x="1787" y="813" key="Github.ShareDialog" timestamp="1597659153008">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state x="1787" y="813" key="Github.ShareDialog/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597659153008" />
-    <state x="1818" y="612" key="Github.UntrackedFilesDialog" timestamp="1597659374089">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state x="1818" y="612" key="Github.UntrackedFilesDialog/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597659374089" />
-    <state width="1701" height="319" key="GridCell.Tab.0.bottom" timestamp="1597686893735">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state width="1701" height="319" key="GridCell.Tab.0.bottom/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597686893735" />
-    <state width="1701" height="319" key="GridCell.Tab.0.center" timestamp="1597686893735">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state width="1701" height="319" key="GridCell.Tab.0.center/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597686893735" />
-    <state width="1701" height="319" key="GridCell.Tab.0.left" timestamp="1597686893735">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state width="1701" height="319" key="GridCell.Tab.0.left/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597686893735" />
-    <state width="1701" height="319" key="GridCell.Tab.0.right" timestamp="1597686893735">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state width="1701" height="319" key="GridCell.Tab.0.right/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597686893735" />
-    <state width="1700" height="392" key="GridCell.Tab.1.bottom" timestamp="1597670735014">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state width="1700" height="392" key="GridCell.Tab.1.bottom/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597670735014" />
-    <state width="1700" height="392" key="GridCell.Tab.1.center" timestamp="1597670735014">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state width="1700" height="392" key="GridCell.Tab.1.center/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597670735014" />
-    <state width="1700" height="392" key="GridCell.Tab.1.left" timestamp="1597670735013">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state width="1700" height="392" key="GridCell.Tab.1.left/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597670735013" />
-    <state width="1700" height="392" key="GridCell.Tab.1.right" timestamp="1597670735014">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state width="1700" height="392" key="GridCell.Tab.1.right/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597670735014" />
-    <state x="1867" y="645" width="981" height="707" key="SettingsEditor" timestamp="1597584137034">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state x="1867" y="645" width="981" height="707" key="SettingsEditor/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597584137034" />
-    <state x="1501" y="648" key="Vcs.Push.Dialog.v2" timestamp="1597675174657">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state x="1501" y="648" key="Vcs.Push.Dialog.v2/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597675174657" />
-    <state x="1564" y="440" width="672" height="677" key="run.anything.popup" timestamp="1597675763169">
-      <screen x="0" y="0" width="3072" height="1728" />
-    </state>
-    <state x="1564" y="440" width="672" height="677" key="run.anything.popup/0.0.3072.1728/3840.1066.1920.1080@0.0.3072.1728" timestamp="1597675763169" />
   </component>
 </project>

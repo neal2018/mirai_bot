@@ -23,6 +23,7 @@ import java.util.regex.*
 const val subListFile = "subs_list.json"
 const val steamListFile = "steam_list.json"
 
+@DelicateCoroutinesApi
 suspend fun main() {
     val dataPath = System.getProperty("user.dir") + File.separator + "src/main/kotlin/com/example/cardData"
     val qqId = 2221744851L // Bot的QQ号，需为Long类型，在结尾处添加大写L
@@ -127,7 +128,7 @@ suspend fun main() {
         override fun run() {
             GlobalScope.launch { sendMorningMessage(miraiBot, groups, dataPath) }
         }
-    }, morningDate, 24 * 60 * 60 * 1000)
+    }, morningDate, 86400000L)
 
     val nightCal = Calendar.getInstance()
     nightCal[Calendar.HOUR_OF_DAY] = 23
@@ -138,19 +139,19 @@ suspend fun main() {
         override fun run() {
             GlobalScope.launch { sendNightMessage(miraiBot, groups, dataPath) }
         }
-    }, nightDate, 24 * 60 * 60 * 1000)
+    }, nightDate, 86400000L)
 
     Timer().scheduleAtFixedRate(object : TimerTask() {
         override fun run() {
             GlobalScope.launch { checkLiveStatus(miraiBot, subscribes) }
         }
-    }, Date(), 60 * 1000)
+    }, Date(), 60000L)
 
     Timer().scheduleAtFixedRate(object : TimerTask() {
         override fun run() {
             GlobalScope.launch { checkSteamLiveStatus(miraiBot, steamSubscribes) }
         }
-    }, Date(), 5 * 60 * 1000)
+    }, Date(), 300000L)
 
     miraiBot.join() // 等待 Bot 离线, 避免主线程退出
 }
