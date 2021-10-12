@@ -22,10 +22,10 @@ import java.util.regex.*
 
 const val subListFile = "subs_list.json"
 const val steamListFile = "steam_list.json"
+val dataPath = System.getProperty("user.dir") + File.separator + "src/main/kotlin/com/example/cardData"
 
 @DelicateCoroutinesApi
 suspend fun main() {
-    val dataPath = System.getProperty("user.dir") + File.separator + "src/main/kotlin/com/example/cardData"
     val qqId = 2221744851L // Bot的QQ号，需为Long类型，在结尾处添加大写L
     val password = readLine()!!
     val groups = listOf(945408322L)
@@ -78,6 +78,15 @@ suspend fun main() {
         }
         startsWith("/smsearch") reply { cmd ->
             getSteamDBSearch(cmd)
+        }
+        (startsWith("/searchdeck") or startsWith("/sd")) reply { cmd ->
+            getDeck(cmd)
+        }
+        (startsWith("/adddeck") or startsWith("/ad")) reply { cmd ->
+            addDeck(cmd)
+        }
+        startsWith("/swdeck") reply {
+            showDeck()
         }
     }
 
@@ -605,4 +614,85 @@ fun setWelcomeMessage(dataPath: String, id: String, cmd: String): String {
     info["welcome$id"] = msg
     File(infoPath).writeText(Klaxon().toJsonString(info))
     return "设置欢迎信息成功！"
+}
+
+fun getDeck(messageContent: String): String {
+    val searchContent = when {
+        messageContent.startsWith("/searchdeck") -> {
+            messageContent.substringAfter("/searchdeck").trim()
+        }
+        messageContent.startsWith("/sd") -> {
+            messageContent.substringAfter("/sd").trim()
+        }
+        else -> {
+            return "[INFO] 错误格式的命令。"
+        }
+    }
+
+    val deckInfo = loadJson(dataPath, "deckInfo")
+    if (searchContent in deckInfo) {
+        return (deckInfo[searchContent] as String).split("###").toTypedArray()
+            .fold("[INFO]$searchContent\n") { acc, code -> "$acc $code \n" }
+    }
+
+    val possibleAnswer: MutableList<String> = mutableListOf()
+
+    for ((key, _) in deckInfo) {
+        if (key.contains(searchContent)) {
+            possibleAnswer.add(key)
+        }
+    }
+
+    return when {
+        possibleAnswer.size == 0 -> {
+            "[INFO] 找不到！"
+        }
+        possibleAnswer.size == 1 -> {
+            (deckInfo[possibleAnswer[0]] as String).split("###").toTypedArray()
+                .fold("[INFO]${possibleAnswer[0]}\n") { acc, code -> "$acc $code \n" }
+        }
+        possibleAnswer.size >= 15 -> {
+            "[INFO] 结果太多，有${possibleAnswer.size}个，请用更精确的关键词！"
+        }
+        else -> {
+            possibleAnswer.fold("[INFO]\n") { acc, code -> "$acc $code \n" }
+        }
+    }
+}
+
+
+fun addDeck(messageContent: String): String {
+    val searchContent = when {
+        messageContent.startsWith("/adddeck") -> {
+            messageContent.substringAfter("/adddeck").trim()
+        }
+        messageContent.startsWith("/ad") -> {
+            messageContent.substringAfter("/ad").trim()
+        }
+        else -> {
+            return "[INFO] 错误格式的命令。"
+        }
+    }
+    val inputs = searchContent.split(" ").toTypedArray()
+    println(inputs)
+    if (inputs.size != 2) return "[INFO] 错误格式的命令。"
+
+    val deckInfo = loadJson(dataPath, "deckInfo")
+    val deckInfoPath = dataPath + File.separator + "deckInfo.json"
+    if (inputs[0] in deckInfo) {
+        deckInfo[inputs[0]] = (deckInfo[inputs[0]] as String) + "###" + inputs[1]
+    } else {
+        deckInfo[inputs[0]] = inputs[1]
+    }
+    File(deckInfoPath).writeText(Klaxon().toJsonString(deckInfo))
+    return getDeck("sd" + inputs[0])
+}
+
+fun showDeck(): String {
+    val deckInfo = loadJson(dataPath, "deckInfo")
+    var res = "[INFO] "
+    for ((key, _) in deckInfo) {
+        res += "$key "
+    }
+    return res
 }
