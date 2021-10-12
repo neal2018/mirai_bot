@@ -680,9 +680,12 @@ fun addDeck(messageContent: String): String {
     val deckInfo = loadJson(dataPath, "deckInfo")
     val deckInfoPath = dataPath + File.separator + "deckInfo.json"
     if (inputs[0] in deckInfo) {
-        val current = (deckInfo[searchContent] as String).split("###").toTypedArray()
+        val current = (deckInfo[inputs[0]] as String).split("###").toTypedArray()
         if (!Arrays.stream(current).anyMatch { t -> t == inputs[1] })
             deckInfo[inputs[0]] = (deckInfo[inputs[0]] as String) + "###" + inputs[1]
+        else{
+            return "[INFO] 已存在的卡组码！"
+        }
     } else {
         deckInfo[inputs[0]] = inputs[1]
     }
