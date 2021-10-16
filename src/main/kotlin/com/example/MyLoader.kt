@@ -582,7 +582,7 @@ fun getAPIMessage(): String {
     val dateFormatter: DateFormat = SimpleDateFormat("yyyy-MM-dd")
     val today = dateFormatter.format(Date())
     val list = listOf("queryranking", "queryenvironment", "querymatches", "querycard")
-    val prefix = "http://cynthia.ovyno.com:5005/api/gwentdata/"
+    val prefix = "http://118.25.75.14:5005/api/gwentdata/"
     return list.fold("[API]") { acc, string -> "$acc\n$prefix$string/$today" }
 }
 
