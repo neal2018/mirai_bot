@@ -14,7 +14,7 @@ repositories {
 }
 
 tasks.withType(KotlinJvmCompile::class.java) {
-    kotlinOptions.jvmTarget = "16"
+    kotlinOptions.jvmTarget = "11"
 }
 
 dependencies {
