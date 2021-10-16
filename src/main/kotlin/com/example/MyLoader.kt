@@ -564,7 +564,7 @@ fun getInfoMessage(messageContent: String, dataPath: String): String {
 
 fun getOnlineMessage(): String {
     val extra = try {
-        val text = URL("http://118.25.75.14:5005/api/gwentdata/onlinecount").readText()
+        val text = URL("http://106.15.38.165:5005/api/gwentdata/onlinecount").readText()
         when {
             (text == "0") -> "现在DIY服没有人在线...QAQ\n"
             else -> "现在DIY服有${text}人在线！\n"
@@ -573,8 +573,8 @@ fun getOnlineMessage(): String {
         ""
     }
 
-    return """[INFO] $extra DIY服的在线人数在：http://118.25.75.14:5005/
-原服的在线人数在：http://118.25.75.14:5000/
+    return """[INFO] $extra DIY服的在线人数在：http://106.15.38.165:5005/
+原服的在线人数在：http://106.15.38.165:5000/
 欢迎大家一起打牌！"""
 }
 
@@ -582,7 +582,7 @@ fun getAPIMessage(): String {
     val dateFormatter: DateFormat = SimpleDateFormat("yyyy-MM-dd")
     val today = dateFormatter.format(Date())
     val list = listOf("queryranking", "queryenvironment", "querymatches", "querycard")
-    val prefix = "http://118.25.75.14:5005/api/gwentdata/"
+    val prefix = "http://106.15.38.165:5005/api/gwentdata/"
     return list.fold("[API]") { acc, string -> "$acc\n$prefix$string/$today" }
 }
 
