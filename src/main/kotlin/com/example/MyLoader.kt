@@ -564,7 +564,7 @@ fun getInfoMessage(messageContent: String, dataPath: String): String {
 
 fun getOnlineMessage(): String {
     val extra = try {
-        val text = URL("http://cynthia.ovyno.com:5005/api/gwentdata/onlinecount").readText()
+        val text = URL("http://118.25.75.14:5005/api/gwentdata/onlinecount").readText()
         when {
             (text == "0") -> "现在DIY服没有人在线...QAQ\n"
             else -> "现在DIY服有${text}人在线！\n"
@@ -573,8 +573,8 @@ fun getOnlineMessage(): String {
         ""
     }
 
-    return """[INFO] $extra DIY服的在线人数在：http://cynthia.ovyno.com:5005/
-原服的在线人数在：http://cynthia.ovyno.com:5000/
+    return """[INFO] $extra DIY服的在线人数在：http://118.25.75.14:5005/
+原服的在线人数在：http://118.25.75.14:5000/
 欢迎大家一起打牌！"""
 }
 
