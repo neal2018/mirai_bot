@@ -55,11 +55,8 @@ suspend fun main() {
     }
 
     fun getNamo(x: String): String {
-        if (Date().time - pastNamoTime.time > 60 * 1000) {
-            pastNamoTime = Date()
-            return "namo是什么意思"
-        }
-        return ""
+        pastNamoTime = Date()
+        return "namo是什么意思"
     }
 
     val miraiBot = BotFactory.newBot(qqId, password) {
@@ -80,7 +77,7 @@ suspend fun main() {
         startsWith("/swdeck") reply {
             showDeck()
         }
-        startsWith("namo") reply { cmd ->
+        (startsWith("namo") and content { Date().time - pastNamoTime.time > 30 * 1000 }) { cmd ->
             getNamo(cmd)
         }
     }
