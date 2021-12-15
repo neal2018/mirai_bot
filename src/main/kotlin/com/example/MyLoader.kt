@@ -22,13 +22,16 @@ import java.util.regex.*
 
 const val subListFile = "subs_list.json"
 const val steamListFile = "steam_list.json"
+const val groupFile = "groups.txt"
+const val groupNotifyFile = "groups_notify.txt"
 val dataPath = System.getProperty("user.dir") + File.separator + "src/main/kotlin/com/example/cardData"
+val groupsNotify = File(groupNotifyFile).useLines { it.toList() }.map { it.toLong() }
 
 @DelicateCoroutinesApi
 suspend fun main() {
     val qqId = 2221744851L // Bot的QQ号，需为Long类型，在结尾处添加大写L
     val password = readLine()!!
-    val groups = listOf(945408322L)
+    val groups = File(groupFile).useLines { it.toList() }.map { it.toLong() }
 
     val subscribes = if (File(subListFile).exists()) {
         Klaxon().parse<MutableMap<String, MutableList<JsonObject>>>(File(subListFile).readText(Charsets.UTF_8))!!
@@ -49,7 +52,7 @@ suspend fun main() {
     }
 
     val miraiBot = BotFactory.newBot(qqId, password) {
-        fileBasedDeviceInfo() // 使用 device.json 存储设备信息
+        fileBasedDeviceInfo("device.json") // 使用 device.json 存储设备信息
         protocol = ANDROID_PAD // 切换协议
     }.alsoLogin()
 
@@ -57,36 +60,17 @@ suspend fun main() {
         (startsWith("/searchcard") or startsWith("/sc")) reply { cmd ->
             getSearchCardMessage(cmd, dataPath)
         }
-        startsWith("/info") reply { cmd ->
-            getInfoMessage(cmd, dataPath)
-        }
-
-        (startsWith("/help") or startsWith("/h")) reply {
-            getHelpMessage(dataPath)
-        }
-
         (startsWith("/baidu") or startsWith("/bd")) reply { cmd ->
             getSearchBaiduMessage(cmd)
-        }
-
-        (startsWith("/online") or startsWith("/ol")) reply {
-            getOnlineMessage()
-        }
-
-        (startsWith("/api") or startsWith("/Api") or startsWith("/API")) reply {
-            getAPIMessage()
         }
         startsWith("/smsearch") reply { cmd ->
             getSteamDBSearch(cmd)
         }
-        (startsWith("/searchdeck") or startsWith("/sd")) reply { cmd ->
-            getDeck(cmd)
-        }
-        (startsWith("/adddeck") or startsWith("/ad")) reply { cmd ->
-            addDeck(cmd)
-        }
         startsWith("/swdeck") reply {
             showDeck()
+        }
+        startsWith("namo") reply {
+            "namo是什么意思"
         }
     }
 
@@ -96,33 +80,44 @@ suspend fun main() {
 
     GlobalEventChannel.subscribeGroupMessages {
         (startsWith("/welcome") or startsWith("/w")) reply {
-            getWelcomeMessage(dataPath, this.group.id.toString())
+            if (this.group.id in groups) getWelcomeMessage(dataPath, this.group.id.toString())
         }
-
         startsWith("/swelcome") reply { cmd ->
-            setWelcomeMessage(dataPath, this.group.id.toString(), cmd)
+            if (this.group.id in groups) setWelcomeMessage(dataPath, this.group.id.toString(), cmd)
         }
-
+        ((startsWith("/help") or startsWith("/h"))) reply {
+            if (this.group.id in groups) getHelpMessage(dataPath);
+        }
+        startsWith("/info") reply { cmd ->
+            if (this.group.id in groups) getInfoMessage(cmd, dataPath)
+        }
+        (startsWith("/online") or startsWith("/ol")) reply {
+            if (this.group.id in groups) getOnlineMessage()
+        }
+        (startsWith("/api") or startsWith("/Api") or startsWith("/API")) reply {
+            if (this.group.id in groups) getAPIMessage()
+        }
+        (startsWith("/searchdeck") or startsWith("/sd")) reply { cmd ->
+            if (this.group.id in groups) getDeck(cmd)
+        }
+        (startsWith("/adddeck") or startsWith("/ad")) reply { cmd ->
+            if (this.group.id in groups) addDeck(cmd)
+        }
         startsWith("/bilisub") reply { cmd ->
             addSubscription(subscribes, this.group.id.toString(), cmd)
         }
-
         startsWith("/biliunsub") reply { cmd ->
             unSubscription(subscribes, this.group.id.toString(), cmd)
         }
-
         startsWith("/bilishow") reply {
             showSubscription(subscribes, this.group.id.toString())
         }
-
         startsWith("/smsub") reply { cmd ->
             addSteamSubscription(steamSubscribes, this.group.id.toString(), cmd)
         }
-
         startsWith("/smunsub") reply { cmd ->
             unSteamSubscription(steamSubscribes, this.group.id.toString(), cmd)
         }
-
         startsWith("/smshow") reply {
             showSteamSubscription(steamSubscribes, this.group.id.toString())
         }
@@ -336,20 +331,20 @@ fun addSubscription(subscribes: MutableMap<String, MutableList<Person>>, group: 
         File(subListFile).writeText(Klaxon().toJsonString(subscribes))
         "订阅 $name 成功"
     } catch (ex: Exception) {
-        "网络状况不良，请稍等再试.。。"
+        "网络状况不良，请稍等再试...."
     }
 }
 
 suspend fun sendMorningMessage(bot: Bot, groups: List<Long>, dataPath: String) {
     val info = loadJson(dataPath, "info")
-    for (group in groups) {
+    for (group in groupsNotify) {
         bot.getGroup(group)?.sendMessage(info["morning"] as String)
     }
 }
 
 suspend fun sendNightMessage(bot: Bot, groups: List<Long>, dataPath: String) {
     val info = loadJson(dataPath, "info")
-    for (group in groups) {
+    for (group in groupsNotify) {
         bot.getGroup(group)?.sendMessage(info["night"] as String)
         bot.getGroup(group)?.sendMessage("这是今天的对局环境情况")
         bot.getGroup(group)?.sendMessage(getAPIMessage())
@@ -596,7 +591,7 @@ fun getWelcomeMessage(dataPath: String, id: String): String {
     return if ("welcome$id" in info) {
         info["welcome$id"] as String
     } else {
-        "欢迎新成员！"
+        ""
     }
 }
 
@@ -683,7 +678,7 @@ fun addDeck(messageContent: String): String {
         val current = (deckInfo[inputs[0]] as String).split("###").toTypedArray()
         if (!Arrays.stream(current).anyMatch { t -> t == inputs[1] })
             deckInfo[inputs[0]] = (deckInfo[inputs[0]] as String) + "###" + inputs[1]
-        else{
+        else {
             return "[INFO] 已存在的卡组码！"
         }
     } else {
