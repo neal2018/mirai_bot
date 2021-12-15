@@ -103,7 +103,7 @@ suspend fun main() {
             if (this.group.id in groups) getInfoMessage(cmd, dataPath)
         }
         (startsWith("/online") or startsWith("/ol")) reply {
-            if (this.group.id in groups) getOnlineMessage()
+            if (this.group.id in groups) getOnlineMessage() else ""
         }
         (startsWith("/api") or startsWith("/Api") or startsWith("/API")) reply {
             if (this.group.id in groups) getAPIMessage()
