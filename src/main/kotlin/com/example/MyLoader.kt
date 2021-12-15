@@ -32,6 +32,7 @@ suspend fun main() {
     val qqId = 2221744851L // Bot的QQ号，需为Long类型，在结尾处添加大写L
     val password = readLine()!!
     val groups = File(groupFile).useLines { it.toList() }.map { it.toLong() }
+    var pastNamoTime = Date()
 
     val subscribes = if (File(subListFile).exists()) {
         Klaxon().parse<MutableMap<String, MutableList<JsonObject>>>(File(subListFile).readText(Charsets.UTF_8))!!
@@ -49,6 +50,14 @@ suspend fun main() {
             }.toMutableMap()
     } else {
         mutableMapOf()
+    }
+
+    fun getNamo(x: String): String {
+        if (Date().time - pastNamoTime.time > 60 * 1000) {
+            pastNamoTime = Date()
+            return "namo是什么意思"
+        }
+        return ""
     }
 
     val miraiBot = BotFactory.newBot(qqId, password) {
@@ -69,8 +78,8 @@ suspend fun main() {
         startsWith("/swdeck") reply {
             showDeck()
         }
-        startsWith("namo") reply {
-            "namo是什么意思"
+        startsWith("namo") reply { cmd ->
+            getNamo(cmd)
         }
     }
 
