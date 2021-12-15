@@ -91,28 +91,28 @@ suspend fun main() {
 
     GlobalEventChannel.subscribeGroupMessages {
         (startsWith("/welcome") or startsWith("/w")) reply {
-            if (this.group.id in groups) getWelcomeMessage(dataPath, this.group.id.toString())
+            if (this.group.id in groups) getWelcomeMessage(dataPath, this.group.id.toString()) else ""
         }
         startsWith("/swelcome") reply { cmd ->
-            if (this.group.id in groups) setWelcomeMessage(dataPath, this.group.id.toString(), cmd)
+            if (this.group.id in groups) setWelcomeMessage(dataPath, this.group.id.toString(), cmd) else ""
         }
         ((startsWith("/help") or startsWith("/h"))) reply {
-            if (this.group.id in groups) getHelpMessage(dataPath);
+            if (this.group.id in groups) getHelpMessage(dataPath) else ""
         }
         startsWith("/info") reply { cmd ->
-            if (this.group.id in groups) getInfoMessage(cmd, dataPath)
+            if (this.group.id in groups) getInfoMessage(cmd, dataPath) else ""
         }
         (startsWith("/online") or startsWith("/ol")) reply {
             if (this.group.id in groups) getOnlineMessage() else ""
         }
         (startsWith("/api") or startsWith("/Api") or startsWith("/API")) reply {
-            if (this.group.id in groups) getAPIMessage()
+            if (this.group.id in groups) getAPIMessage() else ""
         }
         (startsWith("/searchdeck") or startsWith("/sd")) reply { cmd ->
-            if (this.group.id in groups) getDeck(cmd)
+            if (this.group.id in groups) getDeck(cmd) else ""
         }
         (startsWith("/adddeck") or startsWith("/ad")) reply { cmd ->
-            if (this.group.id in groups) addDeck(cmd)
+            if (this.group.id in groups) addDeck(cmd) else ""
         }
         startsWith("/bilisub") reply { cmd ->
             addSubscription(subscribes, this.group.id.toString(), cmd)
@@ -269,7 +269,7 @@ fun addSteamSubscription(
         File(steamListFile).writeText(Klaxon().toJsonString(steamSubscribes))
         "订阅 $name 成功"
     } catch (ex: Exception) {
-        "网络状况不良，请稍等再试.。。"
+        "网络状况不良，请稍等再试..."
     }
 }
 
