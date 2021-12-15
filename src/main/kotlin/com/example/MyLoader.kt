@@ -77,8 +77,8 @@ suspend fun main() {
         startsWith("/swdeck") reply {
             showDeck()
         }
-        (startsWith("namo") and content { _ -> Date().time - pastNamoTime.time > 30 * 1000 }) { cmd ->
-            getNamo(cmd)
+        startsWith("namo") reply { cmd ->
+            if (Date().time - pastNamoTime.time < 30 * 1000) Unit else getNamo(cmd)
         }
     }
 
@@ -88,28 +88,28 @@ suspend fun main() {
 
     GlobalEventChannel.subscribeGroupMessages {
         (startsWith("/welcome") or startsWith("/w")) reply {
-            if (this.group.id in groups) getWelcomeMessage(dataPath, this.group.id.toString()) else ""
+            if (this.group.id in groups) getWelcomeMessage(dataPath, this.group.id.toString()) else Unit
         }
         startsWith("/swelcome") reply { cmd ->
-            if (this.group.id in groups) setWelcomeMessage(dataPath, this.group.id.toString(), cmd) else ""
+            if (this.group.id in groups) setWelcomeMessage(dataPath, this.group.id.toString(), cmd) else Unit
         }
         ((startsWith("/help") or startsWith("/h"))) reply {
-            if (this.group.id in groups) getHelpMessage(dataPath) else ""
+            if (this.group.id in groups) getHelpMessage(dataPath) else Unit
         }
         startsWith("/info") reply { cmd ->
-            if (this.group.id in groups) getInfoMessage(cmd, dataPath) else ""
+            if (this.group.id in groups) getInfoMessage(cmd, dataPath) else Unit
         }
         (startsWith("/online") or startsWith("/ol")) reply {
-            if (this.group.id in groups) getOnlineMessage() else ""
+            if (this.group.id in groups) getOnlineMessage() else Unit
         }
         (startsWith("/api") or startsWith("/Api") or startsWith("/API")) reply {
-            if (this.group.id in groups) getAPIMessage() else ""
+            if (this.group.id in groups) getAPIMessage() else Unit
         }
         (startsWith("/searchdeck") or startsWith("/sd")) reply { cmd ->
-            if (this.group.id in groups) getDeck(cmd) else ""
+            if (this.group.id in groups) getDeck(cmd) else Unit
         }
         (startsWith("/adddeck") or startsWith("/ad")) reply { cmd ->
-            if (this.group.id in groups) addDeck(cmd) else ""
+            if (this.group.id in groups) addDeck(cmd) else Unit
         }
         startsWith("/bilisub") reply { cmd ->
             addSubscription(subscribes, this.group.id.toString(), cmd)
