@@ -26,14 +26,16 @@ const val groupFile = "groups.txt"
 const val groupNotifyFile = "groups_notify.txt"
 val dataPath = System.getProperty("user.dir") + File.separator + "src/main/kotlin/com/example/cardData"
 val groupsNotify = File(groupNotifyFile).useLines { it.toList() }.map { it.toLong() }
+val groups = File(groupFile).useLines { it.toList() }.map { it.toLong() }
 
 @DelicateCoroutinesApi
 suspend fun main() {
     val qqId = 2221744851L // Bot的QQ号，需为Long类型，在结尾处添加大写L
     val password = readLine()!!
-    val groups = File(groupFile).useLines { it.toList() }.map { it.toLong() }
     var pastNamoTime = Date()
-
+    for (g in groups) {
+        println(g)
+    }
     val subscribes = if (File(subListFile).exists()) {
         Klaxon().parse<MutableMap<String, MutableList<JsonObject>>>(File(subListFile).readText(Charsets.UTF_8))!!
             .mapValues { (_, v) ->
