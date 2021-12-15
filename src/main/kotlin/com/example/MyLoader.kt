@@ -77,7 +77,7 @@ suspend fun main() {
         startsWith("/swdeck") reply {
             showDeck()
         }
-        (startsWith("namo") and content { Date().time - pastNamoTime.time > 30 * 1000 }) { cmd ->
+        (startsWith("namo") and content { _ -> Date().time - pastNamoTime.time > 30 * 1000 }) { cmd ->
             getNamo(cmd)
         }
     }
