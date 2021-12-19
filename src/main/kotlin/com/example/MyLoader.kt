@@ -54,11 +54,6 @@ suspend fun main() {
         mutableMapOf()
     }
 
-    fun getNamo(x: String): String {
-        pastNamoTime = Date()
-        return "namo是什么意思"
-    }
-
     val miraiBot = BotFactory.newBot(qqId, password) {
         fileBasedDeviceInfo("device.json") // 使用 device.json 存储设备信息
         protocol = ANDROID_PAD // 切换协议
@@ -76,9 +71,6 @@ suspend fun main() {
         }
         startsWith("/swdeck") reply {
             showDeck()
-        }
-        startsWith("namo") reply { cmd ->
-            if (Date().time - pastNamoTime.time < 30 * 1000) Unit else getNamo(cmd)
         }
     }
 
