@@ -465,15 +465,22 @@ fun getSearchCardMessage(
     if (searchContent in eggInfo) {
         return eggInfo[searchContent] as String
     }
+    val searchContentList = searchContent.split(" ").filter { x -> x.isNotEmpty() }
+
+    fun checkContainsAll(toSearch: String): Boolean {
+        for (keyword in searchContentList) {
+            if (!toSearch.contains(keyword, true)) return false
+        }
+        return true
+    }
 
     val possibleAnswer: MutableList<String> = mutableListOf()
-
     for ((key, value) in cardInfo) {
         if (value is JsonObject) {
-            if ((value["Name"] as String).contains(searchContent) ||
-                (value["Info"] as String).contains(searchContent) ||
-                (value["Flavor"] as String).contains(searchContent) ||
-                (value["Categories"] as List<*>).joinToString().contains(searchContent)
+            if (checkContainsAll(value["Name"] as String) ||
+                checkContainsAll(value["Info"] as String) ||
+                checkContainsAll(value["Flavor"] as String) ||
+                checkContainsAll((value["Categories"] as List<*>).joinToString())
             ) {
                 possibleAnswer.add(key)
             }
